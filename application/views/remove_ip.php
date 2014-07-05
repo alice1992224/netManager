@@ -7,6 +7,7 @@
                     <li><a href="<?= base_url('netManager/add_ip') ?>">Add IP</a></li>
                     <li class="active"><a href="<?= base_url('netManager/remove_ip') ?>">Remove IP</a></li>
                     <li><a href="<?= base_url('netManager/manager') ?>">User List</a></li>
+                    <li><a href="<?= base_url('netManager/facebook') ?>">FB Manager</a></li>
                     <li><a href="<?= base_url('netManager/admin_logout') ?>">Logout</a></li>
                 </ul>
             </div>

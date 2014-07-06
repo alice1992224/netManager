@@ -81,7 +81,10 @@ class Manager_model extends CI_Model {
     
 		//////// update database ///////////
 		$account = $this->security->xss_clean($this->input->post('account'));
-        $data = array('online' => '1');
+        $data = array(
+                'online' => '1',
+                'logintime' => date('Y-m-d H:i:s')
+        );
         $this->db->where('ip', $client);
         return $this->db->update('ipstatus', $data);
     }
@@ -108,25 +111,25 @@ class Manager_model extends CI_Model {
 		foreach($query->result() as $row){
 			if($ip == $row->ip){
 				$account = $row->account;
-				if($row->status == '0'){ 
-					$new_status = '1';
+				if($row->online == '0'){ 
+					$new_online = '1';
 				}
 				else{
-					$new_status = '0';
+					$new_online = '0';
 				}
 			}
 		}
 
-		if( $new_status == '0'){
+		if( $new_online == '0'){
 			//////// delete rule ///////////
 			$this->disable_network($ip);
 		}
 		else {
 			//////// add rule ///////////
-			$this->enable_nework($ip);
+			$this->enable_nework($ip, '30000');
 		}
 	
-		$data = array('status' => $new_status);
+		$data = array('online' => $new_online);
 		$this->db->where('ip', $ip);
 		return $this->db->update('ipstatus', $data);
 

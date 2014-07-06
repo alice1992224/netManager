@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<table class="table table-striped table-hover" id="header" cellpadding="5">
+<table class="table table-striped table-hover" id="header" cellpadding="3">
 <tr>
         <td><strong><?php echo 'Website'; ?></strong></td>
         <td><strong><?php echo 'IP'; ?></strong></td>
@@ -32,10 +32,9 @@
 echo form_open('netManager/add_blacklist')
 ?>
 <tr>
-    <td><input type="text" name="app_name" style="width:30.769em" placeholder="" value=""/></td>
-    <td><input type="text" name="ip" style="width:30.769em" placeholder="" value=""/></td>
-    <td><button type="submit" name="submit" class="btn btn-primary" onclick="this.form.submit();">Add</button></td>
+    <td><input type="text" name="app_name" style="width:100%" placeholder="" value=""/></td>
+    <td><input type="text" name="ip" style="width:100%" placeholder="" value=""/></td>
+    <td><button type="submit" name="submit" class="btn btn-primary" style="width:35%"onclick="this.form.submit();">Add</button></td>
 </tr>
 </form>
 </table>
-

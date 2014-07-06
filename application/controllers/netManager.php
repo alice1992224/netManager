@@ -242,7 +242,7 @@ class NetManager extends CI_Controller {
 		if($this->session->userdata('admin_login') != "1"){
 			redirect('/netManager/admin_login', 'location');
 		}
-        if( $this->input->post('app_name') != "" && $this->input->post('ip') != ""){
+        if( $this->input->post('app_name') != "" || $this->input->post('ip') != ""){
             $this->manager_model->add_blacklist();
         }
 		redirect('/netManager/blacklist', 'location');

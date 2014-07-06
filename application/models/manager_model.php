@@ -17,7 +17,7 @@ class Manager_model extends CI_Model {
     
     public function ip_setting_show_user()
     {
-        $this->db->distinct()->select('account')->from('user');
+        $this->db->distinct()->select('account')->from('userprofile');
         $query = $this->db->get();
         return $query->result();
     }
@@ -204,44 +204,23 @@ class Manager_model extends CI_Model {
 
         $ip_data = array(
                 'status' => 1,
+                'owner' => $account
                 );
         $this->db->where('ip', $ip);
-        $this->db->update('ipstatus', $ip_data);
-        $query = $this->db->get_where('user', array('account' => $account));
-        foreach ($query->result() as $row){
-            $password = $row->password;
-            $office = $row->office;
-            break;
-        }
-
-        $user_data = array(
-                'account' => $account, 
-                'password' => $password,
-                'ip' => $ip,
-                'status' => '0',
-                'time' => date("Y-m-d H:i:s"),
-                'office' => $office
-                );
-
-        return $this->db->insert('user', $user_data);
+        return $this->db->update('ipstatus', $ip_data);
     }
 
     public function delete_ip(){
         $account = $this->input->post('account');
         $ip = $this->input->post('ip');
-
-        $user_info = array(
-                'account' => $account,
-                'ip' => $ip
-                );
-        if($this->db->delete('user', $user_info)){
-        }
-        else{
+        $query = $this->db->select('owner')->from('ipstatus')->where('owner', $account);
+        if($query){
             $ip_data = array(
                     'status' => 0,
+                    'owner' => ""
                     );
             $this->db->where('ip', $ip);
-            $this->db->update('ipstatus', $ip_data);
+            return $this->db->update('ipstatus', $ip_data);
         }
 	}
 

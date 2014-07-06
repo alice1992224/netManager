@@ -30,7 +30,7 @@ if( $online === FALSE ){
         <input type="password" name="password" style="width:30.769em" placeholder="" value="<?php echo set_value('password'); ?>"/>
         <br />
 
-        <button type="button" name="button" class="btn" onclick="this.form.submit();" style="margin-right:10px">Login</button>
+        <button type="submit" name="button" class="btn" onclick="this.form.submit();" style="margin-right:10px">Login</button>
         <button type="button" name="button" class="btn" onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/signup');?>'">Sign up</button>
         <br/>
 

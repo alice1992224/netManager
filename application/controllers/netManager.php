@@ -172,7 +172,7 @@ class NetManager extends CI_Controller {
 		redirect('/netManager/manager', 'location');
 	}
 
-    	public function change_office_status($account)
+   	public function change_office_status($account)
 	{
 		$this->manager_model->change_office($account);
 		redirect('/netManager/manager', 'location');

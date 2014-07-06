@@ -146,6 +146,8 @@ class Manager_model extends CI_Model {
 
 
    	public function change_office($account){
+
+        
         $query = $this->db->get('userprofile');
         foreach($query->result() as $row){
             if($account == $row->account){
@@ -159,6 +161,27 @@ class Manager_model extends CI_Model {
                 }
             }
         }
+
+        $this->db->select('ip');
+        $this->db->from('ipstatus');
+        $this->db->join('userprofile', 'userprofile.account = ipstatus.owner');
+        $this->db->where('online', 1);
+        $query = $this->db->get();
+
+        if($office == 'manager'){
+            $priority = '32100';
+        }
+        else {
+            $priority = '30000';
+        }
+
+        foreach($query->result() as $row){
+
+            $this->disable_network($row->ip);    
+            $this->enable_nework($row->ip, $priority);    
+        }
+
+
         $data = array('office' => $office);
         $this->db->where('account', $account);
         return $this->db->update('userprofile', $data);

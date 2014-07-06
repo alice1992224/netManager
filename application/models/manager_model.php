@@ -11,6 +11,11 @@ class Manager_model extends CI_Model {
         $query = $this->db->get('user');
         return $query->result();
     }
+    public function show_app()
+    {
+        $query = $this->db->get('web_application');
+        return $query->result();
+    }
 
 	public function enable_nework($client){
 		$url = "http://140.113.131.82:8080/wm/staticflowentrypusher/json";
@@ -85,6 +90,27 @@ class Manager_model extends CI_Model {
 		return $this->db->update('user', $data);
 
 	}
+
+
+   	public function change_office($account){
+        $query = $this->db->get('user');
+        foreach($query->result() as $row){
+            if($account == $row->account){
+                if($row->office == 'employee'){ 
+                //////// employee -> employer ///////////
+                    $office = 'manager';
+                }
+                else{
+			    //////// employer -> employee ///////////
+                    $office = 'employee';
+                }
+            }
+        }
+        $data = array('office' => $office);
+        $this->db->where('account', $account);
+        return $this->db->update('user', $data);
+    }
+
 
     public function check_user()
     {

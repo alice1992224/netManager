@@ -60,7 +60,18 @@ class NetManager extends CI_Controller {
 
 		$this->load->view('templates/header');
 		$this->load->view('ip_manager', $data);		
-	}
+    }
+
+    public function facebook(){
+        if($this->session->userdata('admin_login') != "1"){
+            redirect('/netManager/admin_login', 'location');
+        }
+        $data['title'] = "Facebook Manager";
+
+	$data['query'] = $this->manager_model->show_app();
+        $this->load->view('templates/header');
+        $this->load->view('facebook', $data);		
+    }
 
 	public function admin_login(){
 		$data['message'] = "";
@@ -129,6 +140,12 @@ class NetManager extends CI_Controller {
 
 	public function enable_network()
 	{
+		redirect('/netManager/manager', 'location');
+	}
+
+    public function change_office_status($account)
+	{
+		$this->manager_model->change_office($account);
 		redirect('/netManager/manager', 'location');
 	}
 

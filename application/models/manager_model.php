@@ -8,7 +8,10 @@ class Manager_model extends CI_Model {
 	
     public function show_user()
     {
-        $query = $this->db->get('user');
+        $this->db->select('*');
+        $this->db->from('ipstatus');
+        $this->db->join('userprofile', 'userprofile.account = ipstatus.owner');
+        $query = $this->db->get();
         return $query->result();
     }
     
@@ -98,7 +101,10 @@ class Manager_model extends CI_Model {
 
 
    	public function change_status($ip){
-		$query = $this->db->get('user');
+        $this->db->select('*');
+        $this->db->from('userprofile');
+        $this->db->join('ipstatus', 'userprofile.account = ipstatus.owner');
+        $query = $this->db->get();
 		foreach($query->result() as $row){
 			if($ip == $row->ip){
 				$account = $row->account;
@@ -122,13 +128,13 @@ class Manager_model extends CI_Model {
 	
 		$data = array('status' => $new_status);
 		$this->db->where('ip', $ip);
-		return $this->db->update('user', $data);
+		return $this->db->update('ipstatus', $data);
 
 	}
 
 
    	public function change_office($account){
-        $query = $this->db->get('user');
+        $query = $this->db->get('userprofile');
         foreach($query->result() as $row){
             if($account == $row->account){
                 if($row->office == 'employee'){ 
@@ -143,7 +149,7 @@ class Manager_model extends CI_Model {
         }
         $data = array('office' => $office);
         $this->db->where('account', $account);
-        return $this->db->update('user', $data);
+        return $this->db->update('userprofile', $data);
     }
 
 

@@ -1,0 +1,16 @@
+From: NetManager@keepgoing.com
+To: {email}
+Subject: title
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+Dear {user},
+
+Congratulations! Your application is accepted.
+
+Following are ip addresses you can use.
+
+{ip}
+
+Best Regards,
+NetManager 

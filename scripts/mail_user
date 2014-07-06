@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+import sys
+import subprocess
+
+TB_USERPROFILE = 'manager.userprofile'
+TB_IPSTATUS = 'manager.ipstatus'
+for line in open('config'):
+    line = line.strip().split('=', 1)
+    if len(line) == 2:
+        if line[0] == 'DB_USER':
+            DB_USER = line[1]
+        elif line[0] == 'DB_PASSWD':
+            DB_PASSWD = line[1]
+
+
+def runcmd(cmd, input=None, **kwargs):
+    args = {
+        'stdout': subprocess.PIPE,
+        'env': {'PATH': '/sbin:/bin:/usr/sbin:/usr/bin'},
+    }
+    args.update(kwargs)
+
+    # ensure input is bytes
+    if input and not isinstance(input, bytes):
+        input = input.encode()
+        args['stdin'] = subprocess.PIPE
+
+    rst = subprocess.Popen(cmd, **args).communicate(input=input)
+    stdout = rst[0].decode()
+    return stdout
+
+
+def main():
+    uid = sys.argv[1]
+
+    # Get user data.
+    sql = 'SELECT username,account,office,email FROM {} WHERE id={}'.format(
+        TB_USERPROFILE, uid
+    )
+    user = runcmd(['mysql', '-N', '-u', DB_USER, '-p' + DB_PASSWD], input=sql)
+    username, account, office, email = user.strip().split('\t')
+
+    # Choose available ip.
+    sql = 'SELECT ip FROM {} WHERE status=0'.format(TB_IPSTATUS)
+    ips = runcmd(['mysql', '-N', '-u', DB_USER, '-p' + DB_PASSWD], input=sql)
+    ips = [ip.strip() for ip in ips.strip().split('\n')]
+    user_ips = []
+    if office == 'employee':        # give 1 ip
+        user_ips = ips[:1]
+    elif office == 'manager':       # give 3 ip
+        user_ips = ips[:3]
+    else:
+        raise Exception('Unknown office.')
+
+    # Set ip status = 1 and owner.
+    for ip in user_ips:
+        sql = 'UPDATE {} SET owner="{}",status=1 WHERE ip="{}"'.format(
+            TB_IPSTATUS, account, ip
+        )
+        s = runcmd(['mysql', '-N', '-u', DB_USER, '-p' + DB_PASSWD], input=sql)
+
+    # Send mail.
+    mail_content = open('mail_template').read().format(
+        user = username,
+        email = email,
+        ip = '\n'.join(user_ips)
+    )
+    runcmd(['sendmail', '-t'], input=mail_content)
+
+
+if __name__ == '__main__':
+    main()

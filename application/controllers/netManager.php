@@ -289,7 +289,7 @@ class NetManager extends CI_Controller {
 		redirect('/netManager/blacklist', 'location');
 	}
 
-    public function vertify(){
+    public function verify(){
 
 		if($this->session->userdata('admin_login') != "1"){
 			redirect('/netManager/admin_login', 'location');
@@ -300,14 +300,17 @@ class NetManager extends CI_Controller {
         $data['query'] = $this->manager_model->show_userprofile();
 
 		$this->load->view('templates/header', $data);
-		$this->load->view('vertify', $data);
+		$this->load->view('verify', $data);
 	}
 
-    public function vertify_user($id){
-        $this->manager_model->change_vertify_status($id);
+    public function verify_user($id){
+
+
+
+        $this->manager_model->change_verify_status($id);
         $command = 'cd scripts && ./mail_user '.$id;
         $result = exec($command);
-		redirect('/netManager/vertify', 'location');
+		redirect('/netManager/verify', 'location');
     }
 
 

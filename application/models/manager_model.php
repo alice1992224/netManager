@@ -12,16 +12,16 @@ class Manager_model extends CI_Model {
         return $query->result();
     }
 
-	public function enable_nework($client){
+	public function enable_nework($client, $priority){
 		$url = "http://140.113.131.82:8080/wm/staticflowentrypusher/json";
 
 		$content = '{"switch": "00:00:c8:d3:a3:5d:0a:5d", "name":"'.$client.'-1",
-					"cookie":"0", "priority":"30000","ether-type":"0x0800", "src-ip":"'.$client.'",
+					"cookie":"0", "priority":"'.$priority.'","ether-type":"0x0800", "src-ip":"'.$client.'",
 					"active":"true", "actions":"output=1"}';
 
 		$command = "curl -d '".$content."' ".$url;
 		$content2 = '{"switch": "00:00:c8:d3:a3:5d:0a:5d", "name":"'.$client.'-2",
-					"cookie":"0", "priority":"30000","ether-type":"0x0800", "dst-ip":"'.$client.'",
+					"cookie":"0", "priority":"'.$priority.'","ether-type":"0x0800", "dst-ip":"'.$client.'",
 					"ingress-port":"1", "active":"true", "actions":"output=flood"}';
 		$command2 = "curl -d '".$content2."' ".$url;
 
@@ -31,10 +31,23 @@ class Manager_model extends CI_Model {
 
 	public function login_user()
     {
+        // check user is employee or manager
+        $account = $this->security->xss_clean($this->input->post('account'));
+        $query = $this->db->get_where('userprofile', array('account' => $account)); 
+        $priority = '30000';
+
+        foreach ($query->result() as $row)
+        {
+           if( $account == $row->account){
+                if($row->office == 'manager'){
+                    $priority = '32100';
+                }
+            }
+        }
 
 		//////// set rule ///////////
 		$client = $this->input->ip_address();
-		$this->enable_nework($client);
+		$this->enable_nework($client, $priority);
     
 		//////// update database ///////////
 		$account = $this->security->xss_clean($this->input->post('account'));

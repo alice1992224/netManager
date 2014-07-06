@@ -7,7 +7,7 @@
                     <li><a href="<?= base_url('netManager/add_ip') ?>">IP Setting</a></li>
                     <li><a href="<?= base_url('netManager/manager') ?>">User List</a></li>
                     <li><a href="<?= base_url('netManager/blacklist') ?>">Black List</a></li>
-                    <li class="active"><a href="<?= base_url('netManager/vertify') ?>">Vertify User</a></li>
+                    <li class="active"><a href="<?= base_url('netManager/verify') ?>">Verify User</a></li>
                     <li><a href="<?= base_url('netManager/admin_logout') ?>">Logout</a></li>
                 </ul>
             </div>
@@ -32,11 +32,11 @@
     <?php if($row->verified == 0) { ?>
 
     <td><button class="btn btn-primary" type="button" 
-        onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/vertify_user').'/'.$row->id;?>'">
+        onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/verify_user').'/'.$row->id;?>'">
         Vertify</button></td>
     <?php }else{ ?>
     <td><button class="btn btn-success" type="button" disabled="disabled"
-        onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/vertify_user').'/'.$row->id;?>'">
+        onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/verify_user').'/'.$row->id;?>'">
         Vertified</button></td>
     <?php } ?>
 

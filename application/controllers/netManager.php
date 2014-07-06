@@ -229,16 +229,6 @@ class NetManager extends CI_Controller {
 		redirect('/netManager/manager', 'location');
 	}
 
-	public function remove_ip(){
-
-		if($this->session->userdata('admin_login') != "1"){
-			redirect('/netManager/admin_login', 'location');
-		}
-
-		$data['title'] = 'Remove IP';
-		$this->load->view('templates/header', $data);
-		$this->load->view('remove_ip', $data);
-	}
 
     public function blacklist(){
 
@@ -272,7 +262,7 @@ class NetManager extends CI_Controller {
         else
         {
             $this->manager_model->add_blacklist();
-		    redirect('/netManager/blacklist', 'location');
+		    //redirect('/netManager/blacklist', 'location');
         }
 	}
 

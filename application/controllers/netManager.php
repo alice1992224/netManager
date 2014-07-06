@@ -304,6 +304,9 @@ class NetManager extends CI_Controller {
 	}
 
     public function vertify_user($id){
+
+
+
         $this->manager_model->change_vertify_status($id);
         $command = 'cd scripts && ./mail_user '.$id;
         $result = exec($command);

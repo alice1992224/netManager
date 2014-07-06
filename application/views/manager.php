@@ -21,6 +21,7 @@
         <td><strong><?php echo 'IP'; ?></strong></td>
         <td><strong><?php echo 'Online'; ?></strong></td>
         <td><strong><?php echo 'Last Time'; ?></strong></td>
+        <td><strong><?php echo 'Office'; ?></strong></td>
         <td><strong><?php echo 'Enable/Disable'; ?></strong></td>
 </tr>
 <?php foreach($query as $row): ?>
@@ -29,6 +30,12 @@
     <td><?php echo $row->ip; ?></td>
     <td><?php echo $row->status; ?></td>
     <td><?php echo $row->time; ?></td>
+<?php if($row->office === 'manager'){ ?>
+    <td><button class="btn btn-default" type="button" onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/change_office_status')."/".$row->account;?>'">Employee</button></td>
+<?php } else { ?>
+    <td><button class="btn btn-success" type="button" onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/change_office_status')."/".$row->account;?>'">Manager</button></td>
+<?php }?></td>
+
 <?php if($row->status === '1'){ ?>
     <td><button class="btn btn-danger" type="button" onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/change_network_status')."/".$row->ip;?>'">Disable Network</button></td>
 <?php } else { ?>

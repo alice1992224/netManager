@@ -91,6 +91,27 @@ class Manager_model extends CI_Model {
 
 	}
 
+
+   	public function change_office($account){
+        $query = $this->db->get('user');
+        foreach($query->result() as $row){
+            if($account == $row->account){
+                if($row->office == 'employee'){ 
+                //////// employee -> employer ///////////
+                    $office = 'manager';
+                }
+                else{
+			    //////// employer -> employee ///////////
+                    $office = 'employee';
+                }
+            }
+        }
+        $data = array('office' => $office);
+        $this->db->where('account', $account);
+        return $this->db->update('user', $data);
+    }
+
+
     public function check_user()
     {
         $query = $this->db->get('user');

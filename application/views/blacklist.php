@@ -32,8 +32,8 @@
 echo form_open('netManager/add_blacklist')
 ?>
 <tr>
-    <td><input type="text" name="app_name" style="width:100%" placeholder="" value=""/></td>
-    <td><input type="text" name="ip" style="width:100%" placeholder="" value=""/></td>
+    <td><input type="text" name="app_name" style="width:100%" placeholder="" value="<?php echo set_value('app_name'); ?>"/></td>
+    <td><input type="text" name="ip" style="width:100%" placeholder="" value="<?php echo set_value('ip'); ?>"/><?php echo form_error('ip');?></td>
     <td><button type="submit" name="submit" class="btn btn-primary" style="width:35%"onclick="this.form.submit();">Add</button></td>
 </tr>
 </form>

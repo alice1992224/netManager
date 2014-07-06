@@ -242,11 +242,36 @@ class NetManager extends CI_Controller {
 		if($this->session->userdata('admin_login') != "1"){
 			redirect('/netManager/admin_login', 'location');
 		}
-        if( $this->input->post('app_name') != "" || $this->input->post('ip') != ""){
-            $this->manager_model->add_blacklist();
+
+        $this->load->helper(array('form', 'url'));
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('app_name', 'app_name', 'required');
+        $this->form_validation->set_rules('ip', 'ip', 'required|callback_check_same');
+
+        if ($this->form_validation->run() == FALSE) {
+            $data['query'] = $this->manager_model->show_blacklist();
+            $this->load->view('templates/header', $data);
+            $this->load->view('blacklist',$data);
         }
-		redirect('/netManager/blacklist', 'location');
+        else
+        {
+            $this->manager_model->add_blacklist();
+		    redirect('/netManager/blacklist', 'location');
+        }
 	}
+
+    public function check_same($ip){
+        $query = $this->db->get('blacklist'); 
+        foreach ($query->result() as $row)
+        {
+            if( $row->ip == $ip){
+                $this->form_validation->set_message('check_same', 'This ip is allready exist.');
+                return FALSE;
+            }
+        }
+        return TRUE;
+    }
 
     public function remove_blacklist($ip){
 
@@ -256,12 +281,5 @@ class NetManager extends CI_Controller {
         $this->manager_model->remove_blacklist($ip);
 		redirect('/netManager/blacklist', 'location');
 	}
-
-
-
-
-
-
-
 }
 

@@ -128,14 +128,14 @@ class Manager_model extends CI_Model {
 
     public function check_user()
     {
-        $query = $this->db->get('user');
+        $query = $this->db->get('userprofile');
 
 		$account = $this->security->xss_clean($this->input->post('account'));
 		$password = $this->security->xss_clean($this->input->post('password'));
 		
 		foreach ($query->result() as $row)
 		{
-			if( $row->account == $account && $row->password == $password){
+			if( $row->account == $account && $row->password == hash('sha256', $password) ){
 				return TRUE;
 			}
 		}

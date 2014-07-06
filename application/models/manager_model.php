@@ -81,9 +81,9 @@ class Manager_model extends CI_Model {
     
 		//////// update database ///////////
 		$account = $this->security->xss_clean($this->input->post('account'));
-        $data = array('status' => '1');
+        $data = array('online' => '1');
         $this->db->where('ip', $client);
-        return $this->db->update('user', $data);
+        return $this->db->update('ipstatus', $data);
     }
 
 	public function disable_network($client){
@@ -171,10 +171,10 @@ class Manager_model extends CI_Model {
 
     public function check_status(){
 		$ip = $this->input->ip_address();
-		$query = $this->db->get('user');
+		$query = $this->db->get('ipstatus');
 		foreach ($query->result() as $row){
 			if($ip == $row->ip){
-				if($row->status == 0){
+				if($row->online == 0){
 					return FALSE;
 				}else{
 					return TRUE;
@@ -236,9 +236,9 @@ class Manager_model extends CI_Model {
 
 		$now = date("Y-m-d H:i:s");
 		$ip = $this->input->ip_address();	
-		$query = $this->db->get_where('user', array('ip' => $ip));
+		$query = $this->db->get_where('ipstatus', array('ip' => $ip));
 		foreach ($query->result() as $row){
-			$time = $row->time;
+			$time = $row->logintime;
 		}
 
 		return $time_limit - (strtotime($now) - strtotime($time))/ (60);

@@ -7,11 +7,8 @@
                     <li><a href="<?= base_url('netManager/add_ip') ?>">Add IP</a></li>
                     <li><a href="<?= base_url('netManager/remove_ip') ?>">Remove IP</a></li>
                     <li class="active"><a href="<?= base_url('netManager/manager') ?>">User List</a></li>
-<<<<<<< HEAD
                     <li><a href="<?= base_url('netManager/blacklist') ?>">Black List</a></li>
-=======
                     <li><a href="<?= base_url('netManager/facebook') ?>">FB Manager</a></li>
->>>>>>> 53e0724186c22e6f579f4bbeaaed8b111c40e2dc
                     <li><a href="<?= base_url('netManager/admin_logout') ?>">Logout</a></li>
                 </ul>
             </div>

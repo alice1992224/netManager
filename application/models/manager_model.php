@@ -185,14 +185,14 @@ class Manager_model extends CI_Model {
 
 	public function get_ip_list(){
 		$ip_array = array();	
-		$query = $this->db->get('user');
+		$query = $this->db->get('ipstatus');
 		foreach ($query->result() as $row){
 
-			if (!array_key_exists($row->account, $ip_array)) {
-				$ip_array[$row->account] = $row->ip;	
+			if (!array_key_exists($row->owner, $ip_array)) {
+				$ip_array[$row->owner] = $row->ip;	
 			}
 			else{
-				$ip_array[$row->account] = $ip_array[$row->account].", ".$row->ip;	
+				$ip_array[$row->owner] = $ip_array[$row->owner].", ".$row->ip;	
 			}
 		}
 		return $ip_array;

@@ -29,7 +29,17 @@
     <td><?php echo $row->account; ?></td>
     <td><?php echo $row->office; ?></td>
     <td><?php echo $row->email; ?></td>
-    <td><button class="btn btn-primary" type="button" <?php if( $row->verified == 1) {echo 'disabled="disabled"';}?> onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/vertify_user').'/'.$row->id;?>'">Vertify</button></td>
+    <?php if($row->verified == 0) { ?>
+
+    <td><button class="btn btn-primary" type="button" 
+        onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/vertify_user').'/'.$row->id;?>'">
+        Vertify</button></td>
+    <?php }else{ ?>
+    <td><button class="btn btn-success" type="button" disabled="disabled"
+        onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/vertify_user').'/'.$row->id;?>'">
+        Vertified</button></td>
+    <?php } ?>
+
 </tr>
 <?php endforeach; ?>
 </table>

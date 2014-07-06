@@ -25,7 +25,7 @@
 <tr>
     <td><?php echo $row->app_name; ?></td>
     <td><?php echo $row->ip; ?></td>
-    <td><button class="btn btn-primary" type="button" onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/remove_blacklist')."/".$row->ip;?>'">Remove</button></td>
+    <td><button class="btn btn-danger" type="button" onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/remove_blacklist')."/".$row->ip;?>'">Remove</button></td>
 </tr>
 <?php endforeach; ?>
 <?php

@@ -13,13 +13,14 @@ class NetManager extends CI_Controller {
 	public function index()
 	{
 		$data['ip'] = $this->input->ip_address();
-        $query = $this->db->get('user');
+        $query = $this->db->get('ipstatus');
         $valid_ip = FALSE; 
         foreach ($query->result() as $row){
             if($data['ip'] == $row->ip){
                 $valid_ip = TRUE;
             }
         }
+
         if($valid_ip){
 		    $data['online'] = $this->manager_model->check_status();	
 		    $data['remain_time'] = $this->manager_model->count_remain();	

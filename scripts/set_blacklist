@@ -1,0 +1,49 @@
+#!/usr/bin/env sh
+. ./config
+
+call_db() {
+    echo $1 | mysql -u $DB_USER -p$DB_PASSWD -N
+}
+
+main() {
+    if [ "$1" = "enable" ]; then
+        IPS=$(call_db "SELECT ip FROM $DB_TABLE;")
+        for ip in $IPS; do
+            echo
+        done
+
+    elif [ "$1" = "disable" ]; then
+        echo
+
+    elif [ "$1" = "add" ]; then
+        APP_NAME=$2
+        IP=$3
+        call_db "INSERT INTO $DB_TABLE (app_name,ip) VALUE ('$APP_NAME','$IP');"
+        ID=$(call_db "SELECT id FROM $DB_TABLE WHERE ip='$IP';")
+        echo '{
+            "switch": "'$SWITCH'",
+            "name": "blacklist-'$ID'",
+            "cookie": "0",
+            "priority": "32000",
+            "ether-type": "0x0800",
+            "dst-ip": "'$IP'",
+            "active": "true",
+            "actions": ""
+        }' | curl -d @- $ENDPOINT$API
+
+
+    elif [ "$1" = "delete" ]; then
+        IP=$2
+        ID=$(call_db "SELECT id FROM $DB_TABLE WHERE ip='$IP';")
+        call_db "DELETE FROM $DB_TABLE WHERE ip='$IP'"
+        curl -X DELETE -d '{"name":"blacklist-'$ID'"}' $ENDPOINT$API
+
+    else
+        echo "Usage: $0 enable|disable"
+        echo "       $0 add app_name ip"
+        echo "       $0 delete ip"
+        exit 1
+    fi
+}
+
+main "$@"

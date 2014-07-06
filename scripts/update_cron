@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+TMP=$(mktemp)
+cat > $TMP <<EOF
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h d mon dow command
+0  $1 *  *  *   ./set_black_list enable
+0  $2 *  *  *   ./set_black_list disable
+EOF
+
+crontab $TMP
+rm -f $TMP

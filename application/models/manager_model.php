@@ -11,6 +11,27 @@ class Manager_model extends CI_Model {
         $query = $this->db->get('user');
         return $query->result();
     }
+    
+    public function ip_setting_show_user()
+    {
+        $this->db->distinct()->select('account')->from('user');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function add_ip_setting_show_ip()
+    {
+        $this->db->select('ip')->from('ipstatus')->where('status',0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function del_ip_setting_show_ip()
+    {
+        $this->db->select('ip')->from('ipstatus')->where('status',1);
+        $query = $this->db->get();
+        return $query->result();
+    }
 
     public function show_userprofile()
     {
@@ -172,37 +193,50 @@ class Manager_model extends CI_Model {
 	}
 
 	public function set_ip(){
-		$account = $this->security->xss_clean($this->input->post('account'));
-		$ip = $this->security->xss_clean($this->input->post('ip'));
+		$account = $this->input->post('account');
+        $ip = $this->input->post('ip');
 
-        if( $account === "" or $ip === ""){
-            return ;
+        $ip_data = array(
+                'status' => 1,
+                );
+        $this->db->where('ip', $ip);
+        $this->db->update('ipstatus', $ip_data);
+        $query = $this->db->get_where('user', array('account' => $account));
+        foreach ($query->result() as $row){
+            $password = $row->password;
+            $office = $row->office;
+            break;
+        }
+
+        $user_data = array(
+                'account' => $account, 
+                'password' => $password,
+                'ip' => $ip,
+                'status' => '0',
+                'time' => date("Y-m-d H:i:s"),
+                'office' => $office
+                );
+
+        return $this->db->insert('user', $user_data);
+    }
+
+    public function delete_ip(){
+        $account = $this->input->post('account');
+        $ip = $this->input->post('ip');
+
+        $user_info = array(
+                'account' => $account,
+                'ip' => $ip
+                );
+        if($this->db->delete('user', $user_info)){
         }
         else{
-            $password = "123456"; // default password
-            $query = $this->db->get_where('user', array('account' => $account));
-            foreach ($query->result() as $row){
-                $password = $row->password;
-                break;
-            }
-
-            $data = array(
-                    'account' => $account, 
-                    'password' => $password,
-                    'ip' => $ip,
-                    'status' => '0',
-                    'time' => date("Y-m-d H:i:s")
+            $ip_data = array(
+                    'status' => 0,
                     );
-            return $this->db->insert('user', $data);
+            $this->db->where('ip', $ip);
+            $this->db->update('ipstatus', $ip_data);
         }
-	}
-
-	public function delete_ip(){
-		$account = $this->security->xss_clean($this->input->post('account'));
-		$ip = $this->security->xss_clean($this->input->post('ip'));
-		$this->db->where('account', $account);
-		$this->db->where('ip', $ip);
-		$this->db->delete('user'); 
 	}
 
 	public function timer(){

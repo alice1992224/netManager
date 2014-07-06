@@ -47,6 +47,19 @@ class NetManager extends CI_Controller {
 		$data['query'] = $this->manager_model->show_user();
 		$this->load->view('manager', $data);
 	}
+    
+    public function add_ip()
+    {
+        if($this->session->userdata('admin_login') != "1"){
+            redirect('/netManager/admin_login', 'location');
+        }
+
+		$this->load->view('templates/header');
+        $data['account'] = $this->manager_model->ip_setting_show_user();
+        $data['add_ip'] = $this->manager_model->add_ip_setting_show_ip();
+        $data['del_ip'] = $this->manager_model->del_ip_setting_show_ip();
+        $this->load->view('add_ip', $data);
+    }
 
 	public function signup()
 	{
@@ -196,17 +209,6 @@ class NetManager extends CI_Controller {
 				redirect('/netManager/index', 'location');
 			}
 		}
-	}
-
-	public function add_ip(){
-
-		if($this->session->userdata('admin_login') != "1"){
-			redirect('/netManager/admin_login', 'location');
-		}
-
-		$data['title'] = 'Add IP';
-		$this->load->view('templates/header', $data);
-		$this->load->view('add_ip', $data);
 	}
 
 	public function set_ip(){

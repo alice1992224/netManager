@@ -31,7 +31,7 @@
     <td><?php echo $row->email; ?></td>
     <?php if($row->verified == 0) { ?>
 
-    <td><button class="btn btn-primary" type="button" 
+    <td><button class="btn btn-primary" type="button"
         onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/verify_user').'/'.$row->id;?>'">
         Vertify</button></td>
     <?php }else{ ?>

@@ -13,14 +13,14 @@
     </div>
 </div>
 
-<?php 
+<?php
 
 if( $online === FALSE ){
-	echo form_open('netManager/login_account') 
+	echo form_open('netManager/login_account')
 ?>
 	<fieldset>
 		<legend>Login Infomation</legend>
-<?php 
+<?php
 if( $message != ""){
 	echo $message;
 }
@@ -40,10 +40,9 @@ if( $message != ""){
 	</fieldset>
 	</form>
 <?php } else { ?>
-	目前已經是登入狀態
-	登入IP: <?php echo $ip."<br/>"; ?> 
-	剩餘時間：<?php echo $remain_time."<br/>"; ?>
+	You are logged in.
+	Your IP: <?php echo $ip."<br/>"; ?>
+	Time remains: <?php echo $remain_time."<br/>"; ?>
 	<button type="button" name="button" class="btn" onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/logout');?>'">Logout</button>
 <?php } ?>
 
-	

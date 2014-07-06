@@ -14,7 +14,7 @@ class NetManager extends CI_Controller {
 	{
 		$data['ip'] = $this->input->ip_address();
         $query = $this->db->get('ipstatus');
-        $valid_ip = FALSE; 
+        $valid_ip = FALSE;
         foreach ($query->result() as $row){
             if($data['ip'] == $row->ip){
                 $valid_ip = TRUE;
@@ -22,8 +22,8 @@ class NetManager extends CI_Controller {
         }
 
         if($valid_ip){
-		    $data['online'] = $this->manager_model->check_status();	
-		    $data['remain_time'] = $this->manager_model->count_remain();	
+		    $data['online'] = $this->manager_model->check_status();
+		    $data['remain_time'] = $this->manager_model->count_remain();
 		    /**if($data['remain_time'] <= 0){
 			    $data['online'] = FALSE;
 			    $this->manager_model->change_status($data['ip']);
@@ -48,7 +48,7 @@ class NetManager extends CI_Controller {
 		$data['query'] = $this->manager_model->show_user();
 		$this->load->view('manager', $data);
 	}
-    
+
     public function add_ip()
     {
         if($this->session->userdata('admin_login') != "1"){
@@ -69,20 +69,20 @@ class NetManager extends CI_Controller {
 	}
 	public function set_signup(){
 
-		$data['online'] = FALSE;	
-		$this->manager_model->set_signup();	
+		$data['online'] = FALSE;
+		$this->manager_model->set_signup();
 		$this->load->view('templates/header');
 		$this->load->view('portal', $data);
 	}
 	public function login()
 	{
-		$data['online'] = $this->manager_model->check_status();	
+		$data['online'] = $this->manager_model->check_status();
 		$data['remain_time'] = "10:00";
 		$data['message'] = "";
 
-		if( $data['online'] === FALSE){	
+		if( $data['online'] === FALSE){
 			$this->load->view('templates/header');
-			$this->load->view('login', $data);		
+			$this->load->view('login', $data);
 		}
 		else {
 			$this->load->view('templates/header');
@@ -95,22 +95,22 @@ class NetManager extends CI_Controller {
 			redirect('/netManager/admin_login', 'location');
 		}
 		$data['title'] = "IP Manager";
-		$data['query'] = $this->manager_model->get_ip_list();	
+		$data['query'] = $this->manager_model->get_ip_list();
 
 		$this->load->view('templates/header');
-		$this->load->view('ip_manager', $data);		
+		$this->load->view('ip_manager', $data);
     }
 
 
 	public function admin_login(){
 		$data['message'] = "";
 		$this->load->view('templates/header');
-		$this->load->view('admin_login', $data);		
+		$this->load->view('admin_login', $data);
 	}
 
 	public function admin_login_account(){
 
-		$this->form_validation->set_message('required', '必填');
+		$this->form_validation->set_message('required', 'required');
 		$this->form_validation->set_error_delimiters('', '');
 
 		$this->form_validation->set_rules('account', 'account', 'required|max_length[16]');
@@ -181,7 +181,7 @@ class NetManager extends CI_Controller {
 	public function login_account()
 	{
 
-		$this->form_validation->set_message('required', '必填');
+		$this->form_validation->set_message('required', 'required');
 		$this->form_validation->set_error_delimiters('', '');
 
 		$this->form_validation->set_rules('account', 'account', 'required|max_length[16]');
@@ -197,7 +197,7 @@ class NetManager extends CI_Controller {
 		}
 		else
 		{
-			$isCorrect = $this->manager_model->check_user();	
+			$isCorrect = $this->manager_model->check_user();
 			if($isCorrect == FALSE){
 				$data['title'] = "Error";
 				$data['message'] = "Your account or password is incorrect.</br>";
@@ -218,7 +218,7 @@ class NetManager extends CI_Controller {
 			redirect('/netManager/admin_login', 'location');
 		}
 
-		$this->manager_model->set_ip();	
+		$this->manager_model->set_ip();
 		redirect('/netManager/manager', 'location');
 	}
 
@@ -228,7 +228,7 @@ class NetManager extends CI_Controller {
 			redirect('/netManager/admin_login', 'location');
 		}
 
-		$this->manager_model->delete_ip();	
+		$this->manager_model->delete_ip();
 		redirect('/netManager/manager', 'location');
 	}
 
@@ -270,7 +270,7 @@ class NetManager extends CI_Controller {
 	}
 
     public function check_same($ip){
-        $query = $this->db->get('blacklist'); 
+        $query = $this->db->get('blacklist');
         foreach ($query->result() as $row)
         {
             if( $row->ip == $ip){
@@ -296,7 +296,7 @@ class NetManager extends CI_Controller {
 			redirect('/netManager/admin_login', 'location');
 		}
 
-        //$data['query'] = $this->db->get('blacklist')->result(); 
+        //$data['query'] = $this->db->get('blacklist')->result();
 
         $data['query'] = $this->manager_model->show_userprofile();
 

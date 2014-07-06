@@ -68,6 +68,7 @@ class NetManager extends CI_Controller {
         }
         $data['title'] = "Facebook Manager";
 
+	$data['query'] = $this->manager_model->show_app();
         $this->load->view('templates/header');
         $this->load->view('facebook', $data);		
     }

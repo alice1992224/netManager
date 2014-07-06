@@ -11,6 +11,11 @@ class Manager_model extends CI_Model {
         $query = $this->db->get('user');
         return $query->result();
     }
+    public function show_app()
+    {
+        $query = $this->db->get('web_application');
+        return $query->result();
+    }
 
 	public function enable_nework($client){
 		$url = "http://140.113.131.82:8080/wm/staticflowentrypusher/json";

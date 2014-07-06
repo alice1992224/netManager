@@ -12,6 +12,12 @@ class Manager_model extends CI_Model {
         return $query->result();
     }
 
+    public function show_userprofile()
+    {
+        $query = $this->db->get('userprofile');
+        return $query->result();
+    }
+
 	public function enable_nework($client, $priority){
 		$url = "http://140.113.131.82:8080/wm/staticflowentrypusher/json";
 
@@ -250,8 +256,6 @@ class Manager_model extends CI_Model {
 		$office = $this->security->xss_clean($this->input->post('office'));
 		$email = $this->security->xss_clean($this->input->post('email'));
 
-
-
 		$data = array(
 				'username' => $username, 
 				'account' => $account, 
@@ -262,5 +266,12 @@ class Manager_model extends CI_Model {
         $this->db->insert('userprofile', $data);
 	
 	}
+
+    public function change_vertify_status($id){
+        
+        $data = array('verified' => '1');
+        $this->db->where('id', $id);
+        return $this->db->update('userprofile', $data);
+    }
 
 }

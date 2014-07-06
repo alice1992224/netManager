@@ -286,5 +286,27 @@ class NetManager extends CI_Controller {
         $this->manager_model->remove_blacklist($ip);
 		redirect('/netManager/blacklist', 'location');
 	}
+
+    public function vertify(){
+
+		if($this->session->userdata('admin_login') != "1"){
+			redirect('/netManager/admin_login', 'location');
+		}
+
+        //$data['query'] = $this->db->get('blacklist')->result(); 
+
+        $data['query'] = $this->manager_model->show_userprofile();
+
+		$this->load->view('templates/header', $data);
+		$this->load->view('vertify', $data);
+	}
+
+    public function vertify_user($id){
+        $this->manager_model->change_vertify_status($id);
+		redirect('/netManager/vertify', 'location');
+        //$result = exec('pwd');
+    }
+
+
 }
 

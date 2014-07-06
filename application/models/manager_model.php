@@ -224,5 +224,25 @@ class Manager_model extends CI_Model {
     {
         $this->db->delete('blacklist', array('ip' => $ip)); 
     }
+    
+	public function set_signup(){
+		$username = $this->security->xss_clean($this->input->post('username'));
+		$account = $this->security->xss_clean($this->input->post('account'));
+		$password = $this->security->xss_clean($this->input->post('password'));
+		$office = $this->security->xss_clean($this->input->post('office'));
+		$email = $this->security->xss_clean($this->input->post('email'));
+
+
+
+		$data = array(
+				'username' => $username, 
+				'account' => $account, 
+				'password' => $password,
+				'office' => $office,
+				'email' => $email,
+			     );
+        $this->db->insert('userprofile', $data);
+	
+	}
 
 }

@@ -48,6 +48,18 @@ class NetManager extends CI_Controller {
 		$this->load->view('manager', $data);
 	}
 
+	public function signup()
+	{
+		$this->load->view('templates/header');
+		$this->load->view('signup');
+	}
+	public function set_signup(){
+
+		$data['online'] = FALSE;	
+		$this->manager_model->set_signup();	
+		$this->load->view('templates/header');
+		$this->load->view('portal', $data);
+	}
 	public function login()
 	{
 		$data['online'] = $this->manager_model->check_status();	
@@ -146,7 +158,7 @@ class NetManager extends CI_Controller {
 		redirect('/netManager/manager', 'location');
 	}
 
-    public function change_office_status($account)
+    	public function change_office_status($account)
 	{
 		$this->manager_model->change_office($account);
 		redirect('/netManager/manager', 'location');

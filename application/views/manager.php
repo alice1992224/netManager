@@ -28,7 +28,7 @@
 <tr>
     <td><?php echo $row->account; ?></td>
     <td><?php echo $row->ip; ?></td>
-    <td><?php echo $row->status; ?></td>
+    <td><?php echo $row->online; ?></td>
     <td><?php echo $row->logintime; ?></td>
 <?php if($row->office === 'manager'){ ?>
     <td><button class="btn btn-default" type="button" onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/change_office_status')."/".$row->account;?>'">Employee</button></td>

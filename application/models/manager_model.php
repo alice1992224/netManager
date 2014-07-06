@@ -5,7 +5,7 @@ class Manager_model extends CI_Model {
     {
         $this->load->database();
     }
-	
+
     public function show_user()
     {
         $this->db->select('*');
@@ -14,7 +14,7 @@ class Manager_model extends CI_Model {
         $query = $this->db->get();
         return $query->result();
     }
-    
+
     public function ip_setting_show_user()
     {
         $this->db->distinct()->select('account')->from('userprofile');
@@ -63,7 +63,7 @@ class Manager_model extends CI_Model {
     {
         // check user is employee or manager
         $account = $this->security->xss_clean($this->input->post('account'));
-        $query = $this->db->get_where('userprofile', array('account' => $account)); 
+        $query = $this->db->get_where('userprofile', array('account' => $account));
         $priority = '30000';
 
         foreach ($query->result() as $row)
@@ -78,7 +78,7 @@ class Manager_model extends CI_Model {
 		//////// set rule ///////////
 		$client = $this->input->ip_address();
 		$this->enable_nework($client, $priority);
-    
+
 		//////// update database ///////////
 		$account = $this->security->xss_clean($this->input->post('account'));
         $data = array(
@@ -114,9 +114,11 @@ class Manager_model extends CI_Model {
 		foreach($query->result() as $row){
 			if($ip == $row->ip){
 				$account = $row->account;
+
                 if($row->office == 'manager'){
                     $priority = '32100'; 
                 }
+
 				if($row->online == '0'){ 
 					$new_online = '1';
 				}
@@ -135,7 +137,7 @@ class Manager_model extends CI_Model {
 			//////// add rule ///////////
 			$this->enable_nework($ip, $priority);
 		}
-	
+
 		$data = array('online' => $new_online);
 		$this->db->where('ip', $ip);
 		return $this->db->update('ipstatus', $data);
@@ -147,7 +149,7 @@ class Manager_model extends CI_Model {
         $query = $this->db->get('userprofile');
         foreach($query->result() as $row){
             if($account == $row->account){
-                if($row->office == 'employee'){ 
+                if($row->office == 'employee'){
                 //////// employee -> employer ///////////
                     $office = 'manager';
                 }
@@ -169,7 +171,7 @@ class Manager_model extends CI_Model {
 
 		$account = $this->security->xss_clean($this->input->post('account'));
 		$password = $this->security->xss_clean($this->input->post('password'));
-		
+
 		foreach ($query->result() as $row)
 		{
 			if( $row->account == $account && $row->password == hash('sha256', $password) ){
@@ -189,20 +191,20 @@ class Manager_model extends CI_Model {
 				}else{
 					return TRUE;
 				}
-			}	
+			}
 		}
     }
 
 	public function get_ip_list(){
-		$ip_array = array();	
+		$ip_array = array();
 		$query = $this->db->get('ipstatus');
 		foreach ($query->result() as $row){
 
 			if (!array_key_exists($row->owner, $ip_array)) {
-				$ip_array[$row->owner] = $row->ip;	
+				$ip_array[$row->owner] = $row->ip;
 			}
 			else{
-				$ip_array[$row->owner] = $ip_array[$row->owner].", ".$row->ip;	
+				$ip_array[$row->owner] = $ip_array[$row->owner].", ".$row->ip;
 			}
 		}
 		return $ip_array;
@@ -245,7 +247,7 @@ class Manager_model extends CI_Model {
 		$time_limit = 30;
 
 		$now = date("Y-m-d H:i:s");
-		$ip = $this->input->ip_address();	
+		$ip = $this->input->ip_address();
 		$query = $this->db->get_where('ipstatus', array('ip' => $ip));
 		foreach ($query->result() as $row){
 			$time = $row->logintime;
@@ -276,7 +278,7 @@ class Manager_model extends CI_Model {
         $command = 'cd scripts && ./set_blacklist delete '.$ip;
         exec($command);
     }
-    
+
 	public function set_signup(){
 		$username = $this->security->xss_clean($this->input->post('username'));
 		$account = $this->security->xss_clean($this->input->post('account'));
@@ -285,18 +287,18 @@ class Manager_model extends CI_Model {
 		$email = $this->security->xss_clean($this->input->post('email'));
 
 		$data = array(
-				'username' => $username, 
-				'account' => $account, 
+				'username' => $username,
+				'account' => $account,
 				'password' => hash('sha256', $password),
 				'office' => $office,
 				'email' => $email,
 			     );
         $this->db->insert('userprofile', $data);
-	
+
 	}
 
     public function change_verify_status($id){
-        
+
         $data = array('verified' => '1');
         $this->db->where('id', $id);
         return $this->db->update('userprofile', $data);

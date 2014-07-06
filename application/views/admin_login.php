@@ -1,11 +1,10 @@
+<?php
 
-<?php 
-
-	echo form_open('netManager/admin_login_account') 
+	echo form_open('netManager/admin_login_account')
 ?>
 	<fieldset>
 		<legend>Admin Login Infomation</legend>
-<?php 
+<?php
 if( $message != ""){
 	echo $message;
 }
@@ -24,5 +23,3 @@ if( $message != ""){
 
 	</fieldset>
 	</form>
-
-	

@@ -69,7 +69,7 @@ echo form_open('netManager/delete_ip')
         <?php endforeach; ?>
         </select>
 		<br />
-    
+
 		<button type="button" name="button" class="btn" onclick="this.form.submit();">Delete</button>
 		<br/>
 

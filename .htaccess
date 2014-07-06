@@ -1,8 +1,8 @@
 <IfModule mod_rewrite.c>
 RewriteEngine on
-RewriteBase /yc/netManager/
+RewriteBase /CodeIgniter/
 RewriteCond $1 ^(img|js|css)\/
 RewriteRule ^(.*)$ assets/$1 [L]
-RewriteCond $1 !^(index\.php|assets\/|images|includes|robots\.txt|$)
+RewriteCond $1 !^(index\.php|assets\/|images|scripts\/|includes|robots\.txt|$)
 RewriteRule ^(.*)$ index.php/$1 [L,QSA]
 </IfModule>

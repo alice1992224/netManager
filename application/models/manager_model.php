@@ -156,22 +156,26 @@ class Manager_model extends CI_Model {
 		$account = $this->security->xss_clean($this->input->post('account'));
 		$ip = $this->security->xss_clean($this->input->post('ip'));
 
+        if( $account === "" or $ip === ""){
+            return ;
+        }
+        else{
+            $password = "123456"; // default password
+            $query = $this->db->get_where('user', array('account' => $account));
+            foreach ($query->result() as $row){
+                $password = $row->password;
+                break;
+            }
 
-		$password = "123456"; // default password
-		$query = $this->db->get_where('user', array('account' => $account));
-		foreach ($query->result() as $row){
-			$password = $row->password;
-			break;
-		}
-
-        $data = array(
-            'account' => $account, 
-			'password' => $password,
-            'ip' => $ip,
-            'status' => '0',
-			'time' => date("Y-m-d H:i:s")
-        );
-        return $this->db->insert('user', $data);
+            $data = array(
+                    'account' => $account, 
+                    'password' => $password,
+                    'ip' => $ip,
+                    'status' => '0',
+                    'time' => date("Y-m-d H:i:s")
+                    );
+            return $this->db->insert('user', $data);
+        }
 	}
 
 	public function delete_ip(){
@@ -187,6 +191,8 @@ class Manager_model extends CI_Model {
 	}
 
 	public function count_remain(){
+
+        exec('scripts/update_cron 8 17'); //for blacklist
 
 		$time_limit = 30;
 
@@ -210,19 +216,18 @@ class Manager_model extends CI_Model {
 
     public function add_blacklist()
     {
-        $app_name = $this->security->xss_clean($this->input->post('app_name'));
-		$ip = $this->security->xss_clean($this->input->post('ip'));
 
-        $data = array(
-            'app_name' => $app_name, 
-			'ip' => $ip,
-        );
-        return $this->db->insert('blacklist', $data);
+        $app_name = $this->input->post('app_name');
+        $ip = $this->input->post('ip');
+        $command = 'cd scripts && ./set_blacklist add '.$app_name.' '.$ip;
+        $result = exec($command);
+        echo $result;
     }
 
     public function remove_blacklist($ip)
     {
-        $this->db->delete('blacklist', array('ip' => $ip)); 
+        $command = 'cd scripts && ./set_blacklist delete '.$ip;
+        exec($command);
     }
 
 }

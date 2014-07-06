@@ -6,7 +6,6 @@
                     <li><a href="<?= base_url('netManager/index') ?>">Portal</a></li>
                     <li><a href="<?= base_url('netManager/ip_manager') ?>">IP Manager</a></li>
                     <li><a href="<?= base_url('netManager/manager') ?>">Manager</a></li>
-                    <li><a href="<?= base_url('netManager/facebook') ?>">FB Manager</a></li>
                     <li class="active"><a href="<?= base_url('netManager/login') ?>">Login/Logout</a></li>
                 </ul>
             </div>

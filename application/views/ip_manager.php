@@ -4,8 +4,7 @@
             <div class="nav-collapse">
                 <ul class="nav">
                     <li class="active"><a href="<?= base_url('netManager/ip_manager') ?>">IP Manager</a></li>
-                    <li><a href="<?= base_url('netManager/add_ip') ?>">Add IP</a></li>
-                    <li><a href="<?= base_url('netManager/remove_ip') ?>">Remove IP</a></li>
+                    <li><a href="<?= base_url('netManager/add_ip') ?>">IP Setting</a></li>
                     <li><a href="<?= base_url('netManager/manager') ?>">User List</a></li>
                     <li><a href="<?= base_url('netManager/blacklist') ?>">Black List</a></li>
                     <li><a href="<?= base_url('netManager/admin_logout') ?>">Logout</a></li>

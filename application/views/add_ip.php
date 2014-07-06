@@ -40,7 +40,7 @@ echo form_open('netManager/set_ip')
         </select>
 		<br />
 
-		<button type="submit" name="button" class="btn" onclick="this.form.submit();">Add</button>
+		<button type="button" name="button" class="btn" onclick="this.form.submit();">Add</button>
 		<br/>
 
 	</fieldset>

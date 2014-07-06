@@ -273,7 +273,7 @@ class Manager_model extends CI_Model {
 	
 	}
 
-    public function change_vertify_status($id){
+    public function change_verify_status($id){
         
         $data = array('verified' => '1');
         $this->db->where('id', $id);

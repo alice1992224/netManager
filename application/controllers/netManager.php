@@ -208,6 +208,40 @@ class NetManager extends CI_Controller {
 		$this->load->view('remove_ip', $data);
 	}
 
+    public function blacklist(){
+
+		if($this->session->userdata('admin_login') != "1"){
+			redirect('/netManager/admin_login', 'location');
+		}
+
+		$data['title'] = 'BlackList';
+		$data['query'] = $this->manager_model->show_blacklist();
+		$this->load->view('templates/header', $data);
+		$this->load->view('blacklist', $data);
+	}
+
+    public function add_blacklist(){
+
+		if($this->session->userdata('admin_login') != "1"){
+			redirect('/netManager/admin_login', 'location');
+		}
+        if( $this->input->post('app_name') != "" && $this->input->post('ip') != ""){
+            $this->manager_model->add_blacklist();
+        }
+		redirect('/netManager/blacklist', 'location');
+	}
+
+    public function remove_blacklist($ip){
+
+		if($this->session->userdata('admin_login') != "1"){
+			redirect('/netManager/admin_login', 'location');
+		}
+        $this->manager_model->remove_blacklist($ip);
+		redirect('/netManager/blacklist', 'location');
+	}
+
+
+
 
 
 

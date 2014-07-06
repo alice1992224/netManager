@@ -15,14 +15,14 @@ class Manager_model extends CI_Model {
 	public function enable_nework($client){
 		$url = "http://140.113.131.82:8080/wm/staticflowentrypusher/json";
 
-		$content = '{"switch": "00:00:c8:d3:a3:5c:f9:83", "name":"'.$client.'-1",
+		$content = '{"switch": "00:00:c8:d3:a3:5d:0a:5d", "name":"'.$client.'-1",
 					"cookie":"0", "priority":"30000","ether-type":"0x0800", "src-ip":"'.$client.'",
-					"active":"true", "actions":"output=2"}';
+					"active":"true", "actions":"output=1"}';
 
 		$command = "curl -d '".$content."' ".$url;
-		$content2 = '{"switch": "00:00:c8:d3:a3:5c:f9:83", "name":"'.$client.'-2",
+		$content2 = '{"switch": "00:00:c8:d3:a3:5d:0a:5d", "name":"'.$client.'-2",
 					"cookie":"0", "priority":"30000","ether-type":"0x0800", "dst-ip":"'.$client.'",
-					"ingress-port":"2", "active":"true", "actions":"output=flood"}';
+					"ingress-port":"1", "active":"true", "actions":"output=flood"}';
 		$command2 = "curl -d '".$content2."' ".$url;
 
 		exec($command);
@@ -180,4 +180,28 @@ class Manager_model extends CI_Model {
 
 
 	}
+
+    public function show_blacklist()
+    {
+        $query = $this->db->get('blacklist');
+        return $query->result();
+    }
+
+    public function add_blacklist()
+    {
+        $app_name = $this->security->xss_clean($this->input->post('app_name'));
+		$ip = $this->security->xss_clean($this->input->post('ip'));
+
+        $data = array(
+            'app_name' => $app_name, 
+			'ip' => $ip,
+        );
+        return $this->db->insert('blacklist', $data);
+    }
+
+    public function remove_blacklist($ip)
+    {
+        $this->db->delete('blacklist', array('ip' => $ip)); 
+    }
+
 }

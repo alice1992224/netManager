@@ -34,7 +34,7 @@ if( $message != ""){
 		<input type="password" name="password" style="width:30.769em" placeholder="" value="<?php echo set_value('password'); ?>"/>
 		<br />
 
-		<button type="button" name="button" class="btn" onclick="this.form.submit();">Login</button>
+		<button type="submit" name="button" class="btn" onclick="this.form.submit();">Login</button>
 		<br/>
 
 	</fieldset>

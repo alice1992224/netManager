@@ -11,6 +11,33 @@ class Manager_model extends CI_Model {
         $query = $this->db->get('user');
         return $query->result();
     }
+    
+    public function ip_setting_show_user()
+    {
+        $this->db->distinct()->select('account')->from('user');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function add_ip_setting_show_ip()
+    {
+        $this->db->select('ip')->from('ipstatus')->where('status',0);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function del_ip_setting_show_ip()
+    {
+        $this->db->select('ip')->from('ipstatus')->where('status',1);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function show_userprofile()
+    {
+        $query = $this->db->get('userprofile');
+        return $query->result();
+    }
 
 	public function enable_nework($client, $priority){
 		$url = "http://140.113.131.82:8080/wm/staticflowentrypusher/json";
@@ -122,14 +149,14 @@ class Manager_model extends CI_Model {
 
     public function check_user()
     {
-        $query = $this->db->get('user');
+        $query = $this->db->get('userprofile');
 
 		$account = $this->security->xss_clean($this->input->post('account'));
 		$password = $this->security->xss_clean($this->input->post('password'));
 		
 		foreach ($query->result() as $row)
 		{
-			if( $row->account == $account && $row->password == $password){
+			if( $row->account == $account && $row->password == hash('sha256', $password) ){
 				return TRUE;
 			}
 		}
@@ -166,37 +193,50 @@ class Manager_model extends CI_Model {
 	}
 
 	public function set_ip(){
-		$account = $this->security->xss_clean($this->input->post('account'));
-		$ip = $this->security->xss_clean($this->input->post('ip'));
+		$account = $this->input->post('account');
+        $ip = $this->input->post('ip');
 
-        if( $account === "" or $ip === ""){
-            return ;
+        $ip_data = array(
+                'status' => 1,
+                );
+        $this->db->where('ip', $ip);
+        $this->db->update('ipstatus', $ip_data);
+        $query = $this->db->get_where('user', array('account' => $account));
+        foreach ($query->result() as $row){
+            $password = $row->password;
+            $office = $row->office;
+            break;
+        }
+
+        $user_data = array(
+                'account' => $account, 
+                'password' => $password,
+                'ip' => $ip,
+                'status' => '0',
+                'time' => date("Y-m-d H:i:s"),
+                'office' => $office
+                );
+
+        return $this->db->insert('user', $user_data);
+    }
+
+    public function delete_ip(){
+        $account = $this->input->post('account');
+        $ip = $this->input->post('ip');
+
+        $user_info = array(
+                'account' => $account,
+                'ip' => $ip
+                );
+        if($this->db->delete('user', $user_info)){
         }
         else{
-            $password = "123456"; // default password
-            $query = $this->db->get_where('user', array('account' => $account));
-            foreach ($query->result() as $row){
-                $password = $row->password;
-                break;
-            }
-
-            $data = array(
-                    'account' => $account, 
-                    'password' => $password,
-                    'ip' => $ip,
-                    'status' => '0',
-                    'time' => date("Y-m-d H:i:s")
+            $ip_data = array(
+                    'status' => 0,
                     );
-            return $this->db->insert('user', $data);
+            $this->db->where('ip', $ip);
+            $this->db->update('ipstatus', $ip_data);
         }
-	}
-
-	public function delete_ip(){
-		$account = $this->security->xss_clean($this->input->post('account'));
-		$ip = $this->security->xss_clean($this->input->post('ip'));
-		$this->db->where('account', $account);
-		$this->db->where('ip', $ip);
-		$this->db->delete('user'); 
 	}
 
 	public function timer(){
@@ -241,6 +281,31 @@ class Manager_model extends CI_Model {
     {
         $command = 'cd scripts && ./set_blacklist delete '.$ip;
         exec($command);
+    }
+    
+	public function set_signup(){
+		$username = $this->security->xss_clean($this->input->post('username'));
+		$account = $this->security->xss_clean($this->input->post('account'));
+		$password = $this->security->xss_clean($this->input->post('password'));
+		$office = $this->security->xss_clean($this->input->post('office'));
+		$email = $this->security->xss_clean($this->input->post('email'));
+
+		$data = array(
+				'username' => $username, 
+				'account' => $account, 
+				'password' => hash('sha256', $password),
+				'office' => $office,
+				'email' => $email,
+			     );
+        $this->db->insert('userprofile', $data);
+	
+	}
+
+    public function change_vertify_status($id){
+        
+        $data = array('verified' => '1');
+        $this->db->where('id', $id);
+        return $this->db->update('userprofile', $data);
     }
 
 }

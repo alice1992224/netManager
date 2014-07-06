@@ -7,6 +7,7 @@
                     <li class="active"><a href="<?= base_url('netManager/add_ip') ?>">IP Setting</a></li>
                     <li><a href="<?= base_url('netManager/manager') ?>">User List</a></li>
                     <li><a href="<?= base_url('netManager/blacklist') ?>">Black List</a></li>
+                    <li><a href="<?= base_url('netManager/vertify') ?>">Vertify User</a></li>
                     <li><a href="<?= base_url('netManager/admin_logout') ?>">Logout</a></li>
                 </ul>
             </div>
@@ -17,14 +18,26 @@
 <?php
 echo form_open('netManager/set_ip')
 ?>
+
+<br>
+<legend><strong>Add IP</strong></legend>
+
 <table>
 	<fieldset>
-		<label for="account"><b>Account</b></label>
-		<input type="text" name="account" style="width:30.769em" placeholder="" value="<?php echo set_value('account'); ?>"/>
+		<font size="4"><b>Account&nbsp</b></font>
+        <select name="account">
+        <?php foreach($account as $row): ?>
+            <option value="<?php echo $row->account; ?>"><?php echo $row->account; ?></option>
+        <?php endforeach; ?>
+        </select>
 		<br />
 
-		<label for="ip"><b>IP</b></label>
-		<input type="text" name="ip" style="width:30.769em" placeholder="" value="<?php echo set_value('ip'); ?>"/>
+        <font size="4"><b>IP&nbsp</b></font>
+        <select name="ip">
+        <?php foreach($add_ip as $row): ?>
+            <option value="<?php echo $row->ip; ?>"><?php echo $row->ip; ?></option>
+        <?php endforeach; ?>
+        </select>
 		<br />
 
 		<button type="button" name="button" class="btn" onclick="this.form.submit();">Add</button>
@@ -34,18 +47,27 @@ echo form_open('netManager/set_ip')
 </form>
 
 <br>
-<legend> </legend>
+<legend><strong>Remove IP</strong></legend>
 
 <?php
 echo form_open('netManager/delete_ip')
 ?>
 	<fieldset>
-		<label for="account"><b>Account</b></label>
-		<input type="text" name="account" style="width:30.769em" placeholder="" value="<?php echo set_value('account'); ?>"/>
+		<font size="4"><b>Account&nbsp</b></font>
+        <select name="account">
+        <?php foreach($account as $row): ?>
+            <option value="<?php echo $row->account ?>"><?php echo $row->account; ?></option>
+        <?php endforeach; ?>
+        </select>
+
 		<br />
 
-		<label for="ip"><b>IP</b></label>
-		<input type="text" name="ip" style="width:30.769em" placeholder="" value="<?php echo set_value('ip'); ?>"/>
+        <font size="4"><b>IP&nbsp</b></font>
+        <select name="ip">
+        <?php foreach($del_ip as $row): ?>
+            <option value="<?php echo $row->ip ?>"><?php echo $row->ip; ?></option>
+        <?php endforeach; ?>
+        </select>
 		<br />
     
 		<button type="button" name="button" class="btn" onclick="this.form.submit();">Delete</button>

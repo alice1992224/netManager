@@ -217,7 +217,7 @@ class Manager_model extends CI_Model {
         if($query){
             $ip_data = array(
                     'status' => 0,
-                    'owner' => ""
+                    'owner' => "admin"
                     );
             $this->db->where('ip', $ip);
             return $this->db->update('ipstatus', $ip_data);

@@ -5,38 +5,52 @@ call_db() {
     echo $1 | mysql -u $DB_USER -p$DB_PASSWD -N
 }
 
+add_rule() {
+    ID=$1
+    IP=$2
+    echo '{
+        "switch": "'$SWITCH'",
+        "name": "blacklist-'$ID'",
+        "cookie": "0",
+        "priority": "32000",
+        "ether-type": "0x0800",
+        "dst-ip": "'$IP'",
+        "active": "true",
+        "actions": ""
+    }' | curl -d @- $ENDPOINT$API
+}
+
+delete_rule() {
+    ID=$1
+    curl -X DELETE -d '{"name":"blacklist-'$ID'"}' $ENDPOINT$API
+}
+
 main() {
     if [ "$1" = "enable" ]; then
-        IPS=$(call_db "SELECT ip FROM $DB_TABLE;")
-        for ip in $IPS; do
-            echo
+        call_db "SELECT id,ip FROM $DB_TABLE" | while read line; do
+            ID=$(echo $line | cut -f1 -d' ')
+            IP=$(echo $line | cut -f2 -d' ')
+            add_rule $ID $IP
         done
 
     elif [ "$1" = "disable" ]; then
-        echo
+        IDS=$(call_db "SELECT id FROM $DB_TABLE")
+        for ID in $IDS; do
+            delete_rule $ID
+        done
 
     elif [ "$1" = "add" ]; then
         APP_NAME=$2
         IP=$3
-        call_db "INSERT INTO $DB_TABLE (app_name,ip) VALUE ('$APP_NAME','$IP');"
-        ID=$(call_db "SELECT id FROM $DB_TABLE WHERE ip='$IP';")
-        echo '{
-            "switch": "'$SWITCH'",
-            "name": "blacklist-'$ID'",
-            "cookie": "0",
-            "priority": "32000",
-            "ether-type": "0x0800",
-            "dst-ip": "'$IP'",
-            "active": "true",
-            "actions": ""
-        }' | curl -d @- $ENDPOINT$API
-
+        call_db "INSERT INTO $DB_TABLE (app_name,ip) VALUE ('$APP_NAME','$IP')"
+        ID=$(call_db "SELECT id FROM $DB_TABLE WHERE ip='$IP'")
+        add_rule $ID $IP
 
     elif [ "$1" = "delete" ]; then
         IP=$2
-        ID=$(call_db "SELECT id FROM $DB_TABLE WHERE ip='$IP';")
+        ID=$(call_db "SELECT id FROM $DB_TABLE WHERE ip='$IP'")
         call_db "DELETE FROM $DB_TABLE WHERE ip='$IP'"
-        curl -X DELETE -d '{"name":"blacklist-'$ID'"}' $ENDPOINT$API
+        delete_rule $ID
 
     else
         echo "Usage: $0 enable|disable"

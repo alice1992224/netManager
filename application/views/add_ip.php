@@ -7,6 +7,7 @@
                     <li class="active"><a href="<?= base_url('netManager/add_ip') ?>">IP Setting</a></li>
                     <li><a href="<?= base_url('netManager/manager') ?>">User List</a></li>
                     <li><a href="<?= base_url('netManager/blacklist') ?>">Black List</a></li>
+                    <li><a href="<?= base_url('netManager/vertify') ?>">Vertify User</a></li>
                     <li><a href="<?= base_url('netManager/admin_logout') ?>">Logout</a></li>
                 </ul>
             </div>

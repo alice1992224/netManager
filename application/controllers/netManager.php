@@ -61,6 +61,18 @@ class NetManager extends CI_Controller {
         $this->load->view('add_ip', $data);
     }
 
+	public function signup()
+	{
+		$this->load->view('templates/header');
+		$this->load->view('signup');
+	}
+	public function set_signup(){
+
+		$data['online'] = FALSE;	
+		$this->manager_model->set_signup();	
+		$this->load->view('templates/header');
+		$this->load->view('portal', $data);
+	}
 	public function login()
 	{
 		$data['online'] = $this->manager_model->check_status();	
@@ -159,7 +171,7 @@ class NetManager extends CI_Controller {
 		redirect('/netManager/manager', 'location');
 	}
 
-    public function change_office_status($account)
+    	public function change_office_status($account)
 	{
 		$this->manager_model->change_office($account);
 		redirect('/netManager/manager', 'location');
@@ -276,5 +288,27 @@ class NetManager extends CI_Controller {
         $this->manager_model->remove_blacklist($ip);
 		redirect('/netManager/blacklist', 'location');
 	}
+
+    public function vertify(){
+
+		if($this->session->userdata('admin_login') != "1"){
+			redirect('/netManager/admin_login', 'location');
+		}
+
+        //$data['query'] = $this->db->get('blacklist')->result(); 
+
+        $data['query'] = $this->manager_model->show_userprofile();
+
+		$this->load->view('templates/header', $data);
+		$this->load->view('vertify', $data);
+	}
+
+    public function vertify_user($id){
+        $this->manager_model->change_vertify_status($id);
+		redirect('/netManager/vertify', 'location');
+        //$result = exec('pwd');
+    }
+
+
 }
 

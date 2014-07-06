@@ -259,7 +259,7 @@ class Manager_model extends CI_Model {
 		$data = array(
 				'username' => $username, 
 				'account' => $account, 
-				'password' => $password,
+				'password' => hash('sha256', $password),
 				'office' => $office,
 				'email' => $email,
 			     );

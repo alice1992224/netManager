@@ -108,9 +108,15 @@ class Manager_model extends CI_Model {
         $this->db->from('userprofile');
         $this->db->join('ipstatus', 'userprofile.account = ipstatus.owner');
         $query = $this->db->get();
+
+        $priority = '30000';
+
 		foreach($query->result() as $row){
 			if($ip == $row->ip){
 				$account = $row->account;
+                if($row->office == 'manager'){
+                    $priority = '32100'; 
+                }
 				if($row->online == '0'){ 
 					$new_online = '1';
 				}
@@ -120,13 +126,14 @@ class Manager_model extends CI_Model {
 			}
 		}
 
+
 		if( $new_online == '0'){
 			//////// delete rule ///////////
 			$this->disable_network($ip);
 		}
 		else {
 			//////// add rule ///////////
-			$this->enable_nework($ip, '30000');
+			$this->enable_nework($ip, $priority);
 		}
 	
 		$data = array('online' => $new_online);
@@ -262,7 +269,6 @@ class Manager_model extends CI_Model {
         $ip = $this->input->post('ip');
         $command = 'cd scripts && ./set_blacklist add '.$app_name.' '.$ip;
         $result = exec($command);
-        echo $result;
     }
 
     public function remove_blacklist($ip)

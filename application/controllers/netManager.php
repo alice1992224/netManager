@@ -265,7 +265,7 @@ class NetManager extends CI_Controller {
         else
         {
             $this->manager_model->add_blacklist();
-		    //redirect('/netManager/blacklist', 'location');
+		    redirect('/netManager/blacklist', 'location');
         }
 	}
 

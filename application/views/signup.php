@@ -17,7 +17,7 @@ echo form_open('netManager/set_signup')
 	<br />
 
 	<label for="password"><b>Password</b></label>
-	<input type="text" name="password" style="width:30.769em" placeholder="" value="<?php echo set_value('password'); ?>"/>
+	<input type="password" name="password" style="width:30.769em" placeholder="" value="<?php echo set_value('password'); ?>"/>
 	<font color="ff0000"><?php echo form_error('password'); ?></font>
 	<br />
 

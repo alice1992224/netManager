@@ -21,7 +21,7 @@
         <td><strong><?php echo 'Account'; ?></strong></td>
         <td><strong><?php echo 'Office'; ?></strong></td>
         <td><strong><?php echo 'Email'; ?></strong></td>
-        <td><strong><?php echo 'Vertify User'; ?></strong></td>
+        <td><strong><?php echo 'Verify User'; ?></strong></td>
 </tr>
 <?php foreach($query as $row): ?>
 <tr>
@@ -33,11 +33,11 @@
 
     <td><button class="btn btn-primary" type="button"
         onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/verify_user').'/'.$row->id;?>'">
-        Vertify</button></td>
+        Verify</button></td>
     <?php }else{ ?>
     <td><button class="btn btn-success" type="button" disabled="disabled"
         onclick="javascript:location.href='<?php echo $this->config->base_url('netManager/verify_user').'/'.$row->id;?>'">
-        Vertified</button></td>
+        Verified</button></td>
     <?php } ?>
 
 </tr>

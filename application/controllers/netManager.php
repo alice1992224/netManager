@@ -68,12 +68,41 @@ class NetManager extends CI_Controller {
 		$this->load->view('signup');
 	}
 	public function set_signup(){
-
 		$data['online'] = FALSE;
-		$this->manager_model->set_signup();
-		$this->load->view('templates/header');
-		$this->load->view('portal', $data);
+                $this->load->helper(array('form', 'url'));
+                $this->load->library('form_validation');
+
+                $this->form_validation->set_rules('password', 'password', 'required');
+                $this->form_validation->set_rules('email', 'email', 'required');
+                $this->form_validation->set_rules('username', 'username', 'required');
+
+                $this->form_validation->set_rules('account', 'account', 'required|callback_check_accountexist');
+
+                if ($this->form_validation->run() == FALSE) {
+                        //$data['query'] = $this->manager_model->signup();
+                        $this->load->view('templates/header', $data);
+                        $this->load->view('signup');
+                }
+                else
+                {
+                        $this->manager_model->set_signup();
+                        $this->load->view('templates/header');
+                        $this->load->view('portal', $data);
+                }
+
 	}
+        public function check_accountexist($account){
+                $query = $this->db->get('userprofile');
+                foreach ($query->result() as $row)
+                {
+                        if( $row->account == $account){
+                                $this->form_validation->set_message('check_accountexist', 'This account name already exists.');
+                                return FALSE;
+                        }
+                }
+                return TRUE;
+        }
+
 	public function login()
 	{
 		$data['online'] = $this->manager_model->check_status();
